@@ -1,0 +1,50 @@
+<h3>Do your first post or read others: </h3>
+
+<h2>Skapa nytt inlägg</h2>
+<form (ngSubmit)="createPost()">
+    <label for="Title">Title</label>
+    <input type="text" name="Title" id="Title" [(ngModel)]="newPost.title" required>
+
+    <label for="Content">Content</label>
+    <textarea name="content" id="Content" [(ngModel)]="newPost.content" required=""></textarea>
+
+    <label for="username">Username</label>
+    <input type="text" name="authorUsername" id="username" [(ngModel)]="newPost.authorUsername" required>
+
+    <button type="submit">Create post</button>
+</form>
+
+<hr />
+
+<h2>All inlägg</h2>
+<div *ngFor="let p of post">
+    <h3>{{p.title}}</h3>
+    <p>{{p.content}}</p>
+    <small>skriven av: {{p.authorUsername}}</small> <br />
+    <small>Skapad: {{p.createdAt | date:'short'}}</small> <br/>
+    <small>Senast uppdaterad: {{p.updatedAt | date:'short'}}</small> <br />
+
+    <button (click)="selectPostToUpdate(p.id!)">Redigera</button>
+    <button (click)="deletePost(p.id!)">Ta bort</button>
+
+    <hr />
+</div>
+
+<div *ngIf="selectedPostId !== null">
+    <h2>Redigera inlägg</h2>
+    <form (ngSubmit)="updatePost()">
+        <label for="updateTitle">Title</label>
+        <input type="text" [(ngModel)]="postToUpdate.title" name="updateTitle" id="updateTitle" required>
+
+        <label for="updateContent">Content</label>
+        <textarea name="updateContent" id="updateContent" [(ngModel)]="postToUpdate.content" required=""></textarea>
+
+        <label for="updateAuthorUsername">Username</label>
+        <input type="text" [(ngModel)]="postToUpdate.authorUsername" name="updateAuthorUsername" id="updateAuthorUsername" required>
+
+        <button type="submit">Update</button>
+        <button type="button" (click)="selectedPostId = null">Avbryt</button>
+    </form>
+
+
+</div>
