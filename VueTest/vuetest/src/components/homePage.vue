@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="createPost()">
+    <form @submit.prevent="selectedPostId ? updatePost() : createPost()">
         <label for="Title">Title</label>
         <input type="text" id="Title" v-model="newPost.title" required>
 
@@ -9,7 +9,7 @@
         <label for="authorUsername">Username</label>
         <input type="text" id="authorUsername" v-model="newPost.authorUsername" required>
 
-        <button type="submit">Create post</button>
+        <button type="submit">{{ selectedPostId ? 'Update Post' : 'Create Post' }}</button>
     </form>
 
     <div v-for="post in posts" :key="post.id">
@@ -20,7 +20,7 @@
         <small>senast uppdaterad: {{ post.updatedAt }}</small>
 
         <button @click="deletePost(post.id)">Delete</button>
-        <button @click="updatePost(post.id)">Update</button>
+        <button @click="editPost(post)">Update</button>
     </div>
     
 </template>
@@ -36,6 +36,11 @@ export default {
         return {
             posts: [],
             newPost: {
+                title: '',
+                content: '',
+                authorUsername: ''
+            },
+            postToUpdate: {
                 title: '',
                 content: '',
                 authorUsername: ''
@@ -65,10 +70,21 @@ export default {
                 })
         },
 
-        updatePost(id) {
-            miniBlogService.updatePost(id, this.newPost)
+        editPost(post) {
+            this.newPost = {...post}; //kopierar inlägget som ska uppdateras till formuläret
+            this.selectedPostId = post.id; //sätter ID för det inlägg som ska uppdateras
+        },
+
+        updatePost() {
+            if(!this.selectedPostId) {
+                alert("Ingen post vald för uppdatering.");
+                return;
+            }
+
+            miniBlogService.updatePost(this.selectedPostId, this.newPost) //skickar ID och det nya inlägget till servern
                 .then(() => {
                     this.newPost = { title: '', content: '', authorUsername: '' }; //rensar formuläret
+                    this.selectedPostId = null; //rensar ID för det inlägg som ska uppdateras
                     this.getPosts(); //hämtar inläggen igen för att uppdatera listan
                 })
                 .catch(error => {
