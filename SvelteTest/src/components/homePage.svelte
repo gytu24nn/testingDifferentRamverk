@@ -102,7 +102,7 @@
                 <p>{post.content}</p>
                 <small>by: {post.authorUsername}</small> <br>
                 <button on:click={() => editPost(post)}>Update</button>
-                <button on:click={() => deletePost(post.id)}>Delete</button>
+                <button on:click={() => deletePost(post.id)} disabled={selectedPostId !== null}>Delete</button>
             </li>
             
         {/each}

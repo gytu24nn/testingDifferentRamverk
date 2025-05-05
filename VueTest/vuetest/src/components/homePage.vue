@@ -1,5 +1,6 @@
 <template>
     <form @submit.prevent="selectedPostId ? updatePost() : createPost()">
+        <h2>{{ selectedPostId ? 'Update post:' : 'Create post:' }}</h2>
         <label for="Title">Title</label>
         <input type="text" id="Title" v-model="newPost.title" required>
 
@@ -19,7 +20,7 @@
         <small>Skapad: {{ post.createdAt }}</small>
         <small>senast uppdaterad: {{ post.updatedAt }}</small>
 
-        <button @click="deletePost(post.id)">Delete</button>
+        <button @click="deletePost(post.id)" :disabled="selectedPostId !== null">Delete</button>
         <button @click="editPost(post)">Update</button>
     </div>
     
