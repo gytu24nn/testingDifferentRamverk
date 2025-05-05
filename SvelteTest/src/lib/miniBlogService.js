@@ -9,5 +9,14 @@ export default {
 
     createPost(post) {
         return axios.post(apiUrl, post)
-    }
+    },
+
+    updatePost(id, post) {
+        return axios.put(`${apiUrl}/${post.id}`, post)
+    },
+
+    deletePost(postId) {
+        return axios.delete(`${apiUrl}/${postId}`)
+    },
+
 }
